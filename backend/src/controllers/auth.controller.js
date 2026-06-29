@@ -7,7 +7,6 @@ async function registerUser(req,res){
 
     const isUserAlreadyExists = await userModel.findOne({
         $or:[
-            {name},
             {email}
         ]
     })
@@ -43,8 +42,41 @@ async function registerUser(req,res){
 }
 
 async function loginUser(req,res){
-    
+
+
+    const {name,email,password} = req.body;
+    const user = await userModel.findOne({
+        email
+    })
+    if(!user){
+        res.status(201).json({
+            message:"Invalid Credentials"
+        })
+    }
+
+    const isPassword = await bcrypt.compare(password,user.password)
+     if(!isPassword){
+        res.status(201).json({
+            message:"Incorrect password"
+        })
+    }
+
+     const token  = jwt.sign({
+        id:user._id
+    },process.env.JWT_SECRET)
+
+  res.cookie("token",token);
+
+    res.status(200).json({
+        message:"User logged in successfully ",
+        user:{
+            id:user._id,
+            name:user.name,
+            email:user.email,
+        }
+    })
+
 }
 
 
-module.exports = {registerUser}
+module.exports = {registerUser,loginUser}
