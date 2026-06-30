@@ -1,17 +1,29 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { HiMail, HiLockClosed } from 'react-icons/hi';
+import API from '../api/axios';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handlelogin = async (e) => {
     e.preventDefault();
-    // Frontend-only handler
-    alert(`Logging in with: ${email}`);
-    navigate('/');
+    try {
+    // const res = await API.post('/auth/login', {
+    //   email,
+    //   password
+    // });
+    // localStorage.setItem('token', res.data.token); // save JWT
+    const res = await API.post('/auth/login', { email, password });
+    console.log('Full response:', res.data); // check what key the token is under
+    localStorage.setItem('token', res.data.token);
+    window.dispatchEvent(new Event('auth-change'));
+    navigate('/'); // redirect after login
+  } catch (err) {
+    console.error(err.response.data.message);
+  }
   };
 
   return (
@@ -33,7 +45,7 @@ export default function Login() {
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+        <form onSubmit={handlelogin} className="flex flex-col gap-5">
           <div className="flex flex-col text-left gap-2">
             <label className="text-sm font-semibold text-[var(--text-h)]" htmlFor="email">
               Email Address

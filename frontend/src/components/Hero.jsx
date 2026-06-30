@@ -1,8 +1,23 @@
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { HiArrowRight, HiOutlineShieldCheck, HiOutlineSparkles, HiPhotograph, HiUsers } from 'react-icons/hi';
 
 export default function Hero() {
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'));
+
+  useEffect(() => {
+    const handleAuthChange = () => {
+      setIsLoggedIn(!!localStorage.getItem('token'));
+    };
+    window.addEventListener('auth-change', handleAuthChange);
+    window.addEventListener('storage', handleAuthChange);
+    return () => {
+      window.removeEventListener('auth-change', handleAuthChange);
+      window.removeEventListener('storage', handleAuthChange);
+    };
+  }, []);
+
   return (
     <section className="relative overflow-hidden py-20 lg:py-28 bg-[var(--bg)] border-b border-[var(--border)] transition-colors duration-300">
       {/* Subtle Grid overlay background */}
@@ -48,12 +63,21 @@ export default function Hero() {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 mb-6 w-full sm:w-auto"
           >
-            <Link
-              to="/register"
-              className="px-8 py-4 rounded-full bg-gradient-to-r from-[var(--accent)] to-indigo-500 text-white font-bold shadow-lg shadow-[var(--accent)]/20 hover:opacity-95 transition-all hover:-translate-y-0.5 flex items-center justify-center gap-2"
-            >
-              Start Creating Free <HiArrowRight size={18} />
-            </Link>
+            {isLoggedIn ? (
+              <Link
+                to="/"
+                className="px-8 py-4 rounded-full bg-gradient-to-r from-[var(--accent)] to-indigo-500 text-white font-bold shadow-lg shadow-[var(--accent)]/20 hover:opacity-95 transition-all hover:-translate-y-0.5 flex items-center justify-center gap-2"
+              >
+                Start Creating Images <HiArrowRight size={18} />
+              </Link>
+            ) : (
+              <Link
+                to="/register"
+                className="px-8 py-4 rounded-full bg-gradient-to-r from-[var(--accent)] to-indigo-500 text-white font-bold shadow-lg shadow-[var(--accent)]/20 hover:opacity-95 transition-all hover:-translate-y-0.5 flex items-center justify-center gap-2"
+              >
+                Start Creating Free <HiArrowRight size={18} />
+              </Link>
+            )}
             <a
               href="#gallery"
               className="px-8 py-4 rounded-full border border-[var(--border)] bg-[var(--bg)]/50 text-[var(--text-h)] font-semibold hover:bg-[var(--border)]/20 transition-all hover:-translate-y-0.5 text-center"

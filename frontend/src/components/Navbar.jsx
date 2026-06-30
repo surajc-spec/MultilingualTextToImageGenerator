@@ -1,9 +1,56 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { HiMenu, HiX } from 'react-icons/hi';
+import { jwtDecode } from 'jwt-decode';
 
 export default function Navbar() {
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'));
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
+
+  const decodeAndSetUser = () => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        const token = localStorage.getItem('token');
+const decoded = jwtDecode(token);
+        setUser({
+          name: decoded.name || decoded.username || decoded.email || 'User',
+          email: decoded.email
+        });
+      } catch (err) {
+        localStorage.removeItem('token');
+        setUser(null);
+      }
+    } else {
+      setUser(null);
+    }
+  };
+
+  useEffect(() => {
+    decodeAndSetUser();
+
+    const handleAuthChange = () => {
+      setIsLoggedIn(!!localStorage.getItem('token'));
+      decodeAndSetUser();
+    };
+
+    window.addEventListener('auth-change', handleAuthChange);
+    window.addEventListener('storage', handleAuthChange);
+
+    return () => {
+      window.removeEventListener('auth-change', handleAuthChange);
+      window.removeEventListener('storage', handleAuthChange);
+    };
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    window.dispatchEvent(new Event('auth-change'));
+    setIsOpen(false);
+    navigate('/');
+  };
 
   return (
     <nav className="sticky top-0 z-50 backdrop-blur-md bg-[var(--bg)]/80 border-b border-[var(--border)] transition-colors duration-300">
@@ -25,12 +72,28 @@ export default function Navbar() {
           </div>
 
           <div className="hidden md:flex items-center gap-4">
-            <Link to="/login" className="text-sm font-medium text-[var(--text)] hover:text-[var(--text-h)] transition-colors">
-              Log In
-            </Link>
-            <Link to="/register" className="px-5 py-2.5 rounded-xl bg-[var(--accent)] text-white font-medium text-sm hover:opacity-90 shadow-lg shadow-[var(--accent)]/20 transition-all hover:-translate-y-0.5">
-              Get Started Free
-            </Link>
+            {isLoggedIn && user ? (
+              <>
+                <span className="text-sm font-semibold text-[var(--text-h)]">
+                  Hi, {user.name}
+                </span>
+                <button
+                  onClick={handleLogout}
+                  className="px-4 py-2 rounded-xl border border-red-500/30 text-red-500 hover:bg-red-500/10 font-medium text-sm transition-all"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link to="/login" className="text-sm font-medium text-[var(--text)] hover:text-[var(--text-h)] transition-colors">
+                  Log In
+                </Link>
+                <Link to="/register" className="px-5 py-2.5 rounded-xl bg-[var(--accent)] text-white font-medium text-sm hover:opacity-90 shadow-lg shadow-[var(--accent)]/20 transition-all hover:-translate-y-0.5">
+                  Get Started Free
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -51,17 +114,31 @@ export default function Navbar() {
           <Link to="/" onClick={() => setIsOpen(false)} className="text-base font-medium text-[var(--text)] hover:text-[var(--text-h)] py-2">Home</Link>
           <a href="#features" onClick={() => setIsOpen(false)} className="text-base font-medium text-[var(--text)] hover:text-[var(--text-h)] py-2">Features</a>
           <a href="#gallery" onClick={() => setIsOpen(false)} className="text-base font-medium text-[var(--text)] hover:text-[var(--text-h)] py-2">Gallery</a>
-          <a href="#" onClick={() => setIsOpen(false)} className="text-base font-medium text-[var(--text)] hover:text-[var(--text-h)] py-2">Pricing</a>
           <hr className="border-[var(--border)]" />
-          <Link to="/login" onClick={() => setIsOpen(false)} className="w-full text-center py-2.5 text-base font-medium text-[var(--text)] hover:text-[var(--text-h)]">
-            Log In
-          </Link>
-          <Link to="/register" onClick={() => setIsOpen(false)} className="w-full py-3 rounded-xl bg-[var(--accent)] text-white font-medium text-base text-center hover:opacity-90 shadow-lg shadow-[var(--accent)]/20">
-            Get Started Free
-          </Link>
+          {isLoggedIn && user ? (
+            <div className="flex flex-col gap-3">
+              <span className="text-base font-semibold text-[var(--text-h)] px-2">
+                Hi, {user.name}
+              </span>
+              <button 
+                onClick={handleLogout}
+                className="w-full py-3 rounded-xl border border-red-500/30 text-red-500 bg-red-500 font-medium text-base text-center"
+              >
+                Logout
+              </button>
+            </div>
+          ) : (
+            <div className="flex flex-col gap-3">
+              <Link to="/login" onClick={() => setIsOpen(false)} className="w-full text-center py-2.5 text-base font-medium text-[var(--text)] hover:text-[var(--text-h)]">
+                Log In
+              </Link>
+              <Link to="/register" onClick={() => setIsOpen(false)} className="w-full py-3 rounded-xl bg-[var(--accent)] text-white font-medium text-base text-center hover:opacity-90 shadow-lg shadow-[var(--accent)]/20">
+                Get Started Free
+              </Link>
+            </div>
+          )}
         </div>
       )}
     </nav>
   );
 }
-

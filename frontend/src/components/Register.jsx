@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { HiUser, HiMail, HiLockClosed } from 'react-icons/hi';
+import API from '../api/axios';
 
 export default function Register() {
   const [name, setName] = useState('');
@@ -8,11 +9,21 @@ export default function Register() {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
-    // Frontend-only handler
-    alert(`Registering account for: ${name} (${email})`);
-    navigate('/login');
+   try {
+    const res = await API.post('/auth/register', {
+      name,
+      email,
+      password
+    });
+    console.log(res.data);
+    localStorage.setItem('token', res.data.token); // Save JWT on registration
+    window.dispatchEvent(new Event('auth-change'));
+    navigate('/'); // redirect after success
+  } catch (err) {
+    console.error(err.response.data.message);
+  }
   };
 
   return (
@@ -30,11 +41,11 @@ export default function Register() {
             <span>Aura<span className="text-[var(--accent)]">AI</span></span>
           </Link>
           <h2 className="text-2xl font-bold text-[var(--text-h)]">Create your account</h2>
-          <p className="text-sm text-[var(--text)] mt-2">Get started with 500 free generations daily</p>
+         
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+        <form onSubmit={handleRegister} className="flex flex-col gap-5">
           <div className="flex flex-col text-left gap-2">
             <label className="text-sm font-semibold text-[var(--text-h)]" htmlFor="name">
               Full Name
