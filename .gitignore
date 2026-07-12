@@ -30,5 +30,4 @@
 **/.env.development.local
 **/.env.production.local
 
-
-**/api
+
