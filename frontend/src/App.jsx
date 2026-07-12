@@ -5,6 +5,7 @@ import Generate from "./pages/Generate";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
   return (
@@ -18,8 +19,9 @@ function App() {
 
           {/* Protected Routes */}
           <Route element={<ProtectedRoute />}>
-            <Route path="/generate" element={<Generate />} />
-          </Route>
+          <Route path="/generate" element={<Generate />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+        </Route>
         </Routes>
       </div>
     </Router>

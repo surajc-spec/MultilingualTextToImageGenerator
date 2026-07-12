@@ -110,7 +110,7 @@ const Generate = () => {
         throw new Error("Image was not returned by the server.");
       }
 
-      setImageUrl(result.image);
+      setImageUrl(result.image.imageUrl);
     } catch (err) {
       console.error("Generate Error:", err);
 
