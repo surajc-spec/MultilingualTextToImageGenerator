@@ -4,6 +4,11 @@ import { HiLightningBolt, HiCollection, HiShieldCheck } from 'react-icons/hi';
 export default function Features() {
   const list = [
     {
+    icon: <HiLightningBolt className="w-6 h-6 text-indigo-500" />,
+    title: "Multilingual Generation",
+    desc: "Create AI images using prompts in multiple Indian languages, turning your ideas into visuals without language barriers.",
+    },
+    {
       icon: <HiLightningBolt className="w-6 h-6 text-indigo-500" />,
       title: 'Lightning Fast',
       desc: 'Generate ultra-high resolution images in under 8 seconds using our distributed GPU cluster.',
@@ -12,12 +17,8 @@ export default function Features() {
       icon: <HiCollection className="w-6 h-6 text-[var(--accent)]" />,
       title: 'Multiple Styles',
       desc: 'From photorealistic portraits to vibrant anime and cinematic concept art, choose your aesthetic.',
-    },
-    {
-      icon: <HiShieldCheck className="w-6 h-6 text-emerald-500" />,
-      title: 'Secure & Private',
-      desc: 'Your creative prompts and personal data are never shared or used for training without your consent.',
-    },
+    }
+   
   ];
 
 

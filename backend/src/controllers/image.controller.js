@@ -1,31 +1,67 @@
 // backend/src/controllers/image.controller.js
-const imageService = require('../services/image.service');
+
+const imageService = require("../services/image.service");
+const translationService = require("../services/translation.service");
 
 const createGeneratedImage = async (req, res) => {
     try {
-        const { prompt } = req.body;
-        if (!prompt) {
-            return res.status(400).json({ error: "A text prompt parameter is required." });
+        const { prompt, language = "English" } = req.body;
+
+        // Validate prompt
+        if (!prompt || !prompt.trim()) {
+            return res.status(400).json({
+                error: "A text prompt parameter is required."
+            });
         }
 
-        console.log(`Processing prompt: "${prompt}"...`);
-        
-        // 1. Call your image service to fetch raw image bytes
-        const imageBuffer = await imageService.generateCloudflareImage(prompt);
+        const originalPrompt = prompt.trim();
 
-        // 2. Convert raw image buffer directly to a base64 Data URI
-        const base64Image = `data:image/jpeg;base64,${imageBuffer.toString('base64')}`;
+        console.log(`Original Prompt: "${originalPrompt}"`);
+        console.log(`Selected Language: ${language}`);
 
-        // 3. Respond back to the frontend client app with the image data URI
+        let finalPrompt = originalPrompt;
+
+        // Translate only non-English prompts
+        if (language.toLowerCase() !== "english") {
+            console.log("Translating prompt to English...");
+
+            finalPrompt = await translationService.translatePrompt(
+                originalPrompt,
+                language
+            );
+
+            console.log(`Translated Prompt: "${finalPrompt}"`);
+        } else {
+            console.log("English prompt detected. Skipping translation.");
+        }
+
+        // Generate image using English prompt
+        console.log(`Generating image using: "${finalPrompt}"`);
+
+        const imageBuffer =
+            await imageService.generateCloudflareImage(finalPrompt);
+
+        // Convert image buffer to Base64 Data URI
+        const base64Image = `data:image/jpeg;base64,${imageBuffer.toString(
+            "base64"
+        )}`;
+
         return res.status(200).json({
             success: true,
             message: "Image successfully created.",
+            originalPrompt,
+            translatedPrompt: finalPrompt,
+            language,
             image: base64Image
         });
 
     } catch (error) {
         console.error("Controller Error:", error.message);
-        return res.status(500).json({ error: error.message });
+
+        return res.status(500).json({
+            success: false,
+            error: error.message
+        });
     }
 };
 

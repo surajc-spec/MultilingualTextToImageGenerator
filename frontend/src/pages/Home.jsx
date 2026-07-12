@@ -21,7 +21,7 @@ export default function Home() {
       <Gallery />
 
       {/* CTA Section */}
-      <CTA />
+      {/* <CTA /> */}
 
       {/* Footer */}
       <Footer />
