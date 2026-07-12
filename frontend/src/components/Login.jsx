@@ -31,7 +31,7 @@ export default function Login() {
       {/* Decorative Glow */}
       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-[var(--accent)]/10 rounded-full blur-[100px] pointer-events-none" />
 
-      <div className="w-full max-w-md bg-[var(--bg)] border border-[var(--border)] p-8 rounded-3xl theme-shadow relative z-10">
+      <div className="w-full max-w-md bg-[var(--bg)] border border-[var(--border)] p-8 rounded-3xl shadow-[var(--shadow)] relative z-10">
         {/* Header */}
         <div className="text-center mb-8">
           <Link to="/" className="inline-flex items-center gap-2 font-bold text-xl tracking-tight text-[var(--text-h)] mb-4">

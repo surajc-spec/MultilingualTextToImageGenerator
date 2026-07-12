@@ -10,7 +10,7 @@ export default function CTA() {
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[var(--border)]/20 via-[var(--accent-bg)]/40 to-[var(--border)]/40 border border-[var(--border)] px-8 py-16 sm:px-16 sm:py-24 flex flex-col md:flex-row items-center justify-between gap-8 theme-shadow"
+          className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[var(--border)]/20 via-[var(--accent-bg)]/40 to-[var(--border)]/40 border border-[var(--border)] px-8 py-16 sm:px-16 sm:py-24 flex flex-col md:flex-row items-center justify-between gap-8 shadow-[var(--shadow)]"
         >
           {/* Decorative Glow */}
           <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/3 w-[300px] h-[300px] bg-[var(--accent)]/10 rounded-full blur-[80px] pointer-events-none" />

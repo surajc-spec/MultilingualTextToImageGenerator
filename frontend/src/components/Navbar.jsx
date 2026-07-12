@@ -61,12 +61,13 @@ const decoded = jwtDecode(token);
             <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-[var(--accent)] to-indigo-500 flex items-center justify-center text-white font-black text-lg">
               A
             </div>
-            <span>Aura<span className="text-[var(--accent)]">AI</span></span>
+            <span>Aura<span className="text-[var(--accent)]"> AI</span></span>
           </Link>
 
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center gap-8">
             <Link to="/" className="text-sm font-medium text-[var(--text)] hover:text-[var(--text-h)] transition-colors">Home</Link>
+            <Link to="/generate" className="text-sm font-medium text-[var(--text)] hover:text-[var(--text-h)] transition-colors">Generate</Link>
             <a href="#features" className="text-sm font-medium text-[var(--text)] hover:text-[var(--text-h)] transition-colors">Features</a>
             <a href="#gallery" className="text-sm font-medium text-[var(--text)] hover:text-[var(--text-h)] transition-colors">Gallery</a>
           </div>
@@ -112,6 +113,7 @@ const decoded = jwtDecode(token);
       {isOpen && (
         <div className="md:hidden border-b border-[var(--border)] bg-[var(--bg)] px-6 py-6 flex flex-col gap-4 animate-in fade-in slide-in-from-top-5 duration-200">
           <Link to="/" onClick={() => setIsOpen(false)} className="text-base font-medium text-[var(--text)] hover:text-[var(--text-h)] py-2">Home</Link>
+          <Link to="/generate" onClick={() => setIsOpen(false)} className="text-base font-medium text-[var(--text)] hover:text-[var(--text-h)] py-2">Generate</Link>
           <a href="#features" onClick={() => setIsOpen(false)} className="text-base font-medium text-[var(--text)] hover:text-[var(--text-h)] py-2">Features</a>
           <a href="#gallery" onClick={() => setIsOpen(false)} className="text-base font-medium text-[var(--text)] hover:text-[var(--text-h)] py-2">Gallery</a>
           <hr className="border-[var(--border)]" />

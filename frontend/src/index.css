@@ -44,36 +44,3 @@
     font-family: var(--heading);
   }
 }
-
-/* Custom theme helper classes matching existing variables */
-.theme-text {
-  color: var(--text);
-}
-
-.theme-text-h {
-  color: var(--text-h);
-}
-
-.theme-bg {
-  background-color: var(--bg);
-}
-
-.theme-border {
-  border-color: var(--border);
-}
-
-.theme-accent {
-  color: var(--accent);
-}
-
-.theme-accent-bg {
-  background-color: var(--accent-bg);
-}
-
-.theme-accent-border {
-  border-color: var(--accent-border);
-}
-
-.theme-shadow {
-  box-shadow: var(--shadow);
-}
